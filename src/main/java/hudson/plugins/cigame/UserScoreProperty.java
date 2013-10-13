@@ -2,22 +2,19 @@ package hudson.plugins.cigame;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import hudson.model.AbstractBuild;
+import hudson.model.User;
+import hudson.model.UserProperty;
 import hudson.plugins.cigame.model.ScoreHistoryEntry;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
-import hudson.model.User;
-import hudson.model.UserProperty;
-
 import java.util.Collections;
 import java.util.List;
 
 /**
- * 
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
@@ -25,20 +22,19 @@ public class UserScoreProperty extends UserProperty {
 
     @VisibleForTesting
     protected static final int MAX_HISTORY_LENGTH = 10;
-
     private double score;
-    
-    /** Inversed name as default value is false when serializing from data that
-     * has doesnt have the value. */
+    /**
+     * Inversed name as default value is false when serializing from data that
+     * has doesnt have the value.
+     */
     private boolean isNotParticipatingInGame;
-
     private List<ScoreHistoryEntry> scoreHistoryEntries;
 
     public UserScoreProperty() {
         score = 0;
         isNotParticipatingInGame = false;
     }
-    
+
     @DataBoundConstructor
     public UserScoreProperty(double score, boolean participatingInGame, List<ScoreHistoryEntry> scoreHistoryEntries) {
         this.score = score;
@@ -71,7 +67,7 @@ public class UserScoreProperty extends UserProperty {
 
     @VisibleForTesting
     protected void addScoreHistoryEntry(ScoreHistoryEntry scoreHistoryEntry) {
-        if(this.scoreHistoryEntries == null) {
+        if (this.scoreHistoryEntries == null) {
             this.scoreHistoryEntries = Lists.newLinkedList();
         }
         makeSpaceForNewEntryInHistory();
@@ -79,13 +75,13 @@ public class UserScoreProperty extends UserProperty {
     }
 
     private void makeSpaceForNewEntryInHistory() {
-        while(historyReachesOrIsAboveCapacityLimit()) {
+        while (historyReachesOrIsAboveCapacityLimit()) {
             removeOldestHistoryEntry();
         }
     }
 
     private void removeOldestHistoryEntry() {
-        this.scoreHistoryEntries.remove(this.scoreHistoryEntries.size()-1);
+        this.scoreHistoryEntries.remove(this.scoreHistoryEntries.size() - 1);
     }
 
     private boolean historyReachesOrIsAboveCapacityLimit() {
@@ -94,13 +90,11 @@ public class UserScoreProperty extends UserProperty {
 
     @Exported
     public List<ScoreHistoryEntry> getMostRecentScores() {
-        if(this.scoreHistoryEntries == null) {
+        if (this.scoreHistoryEntries == null) {
             return Collections.emptyList();
         }
         return Lists.newLinkedList(this.scoreHistoryEntries);
     }
-
-
 
     @Override
     public String toString() {

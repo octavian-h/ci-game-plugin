@@ -1,9 +1,5 @@
 package hudson.plugins.cigame;
 
-import net.sf.json.JSONObject;
-
-import org.kohsuke.stapler.StaplerRequest;
-
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.plugins.cigame.model.RuleBook;
@@ -18,13 +14,14 @@ import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
 import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
+import net.sf.json.JSONObject;
+import org.kohsuke.stapler.StaplerRequest;
 
 @Extension
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
-    
     private transient RuleBook rulebook;
     private boolean namesAreCaseSensitive = true;
 
@@ -35,7 +32,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     /**
      * Returns the default rule book
-     * 
+     *
      * @return the rule book that is configured for the game.
      */
     public RuleBook getRuleBook() {

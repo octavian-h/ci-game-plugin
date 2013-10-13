@@ -11,7 +11,7 @@
         		<tr><td class="pane-header" align="left">${%Rule}</td><td class="pane-header" initialSortDir="up" align="left">${%Points}</td></tr>
           		<j:forEach var="score" items="${sc.scores}">
         			<tr>
-        				<td><div tooltip="${%Scorecard.Rule.Tooltip(score.rulesetName, score.ruleName)}">${score.description}</div></td>
+        				<td><div tooltip="${%Scorecard.Rule.Tooltip(score.ruleSetName, score.ruleName)}">${score.description}</div></td>
         				<td>${score.value}</td>
         			</tr> 
           		</j:forEach>

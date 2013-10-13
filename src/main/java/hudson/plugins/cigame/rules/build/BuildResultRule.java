@@ -8,7 +8,7 @@ import hudson.plugins.cigame.model.RuleResult;
 /**
  * Rule that gives points on the result of the build.
  */
-public class BuildResultRule implements Rule {
+public class BuildResultRule implements Rule<Void> {
 
     private int failurePoints;
     private int successPoints;
@@ -22,22 +22,24 @@ public class BuildResultRule implements Rule {
         this.failurePoints = failurePoints;
     }
 
+    @Override
     public String getName() {
         return Messages.BuildRuleSet_BuildResult(); //$NON-NLS-1$
     }
 
-    public RuleResult evaluate(AbstractBuild<?, ?> build) {
+    @Override
+    public RuleResult<Void> evaluate(AbstractBuild<?, ?> previousBuild, AbstractBuild<?, ?> build) {
         Result result = build.getResult();
         Result lastResult = null;
-        if (build.getPreviousBuild() != null) {
-            lastResult = build.getPreviousBuild().getResult();
+        if (previousBuild != null) {
+            lastResult = previousBuild.getResult();
         }
         return evaluate(result, lastResult);
     }
 
-    RuleResult evaluate(Result result, Result lastResult) {
+    RuleResult<Void> evaluate(Result result, Result lastResult) {
         if (result == Result.SUCCESS) {
-            return new RuleResult( successPoints, Messages.BuildRuleSet_BuildSuccess()); //$NON-NLS-1$
+            return new RuleResult(successPoints, Messages.BuildRuleSet_BuildSuccess()); //$NON-NLS-1$
         }
         if (result == Result.FAILURE) {
             if ((lastResult == null)

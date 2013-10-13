@@ -1,14 +1,5 @@
 package hudson.plugins.cigame;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.Hudson;
@@ -16,6 +7,10 @@ import hudson.model.User;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+
+import java.util.*;
 
 /**
  * Score card for a certain build
@@ -24,8 +19,6 @@ import hudson.scm.ChangeLogSet.Entry;
  */
 @ExportedBean(defaultVisibility = 999)
 public class ScoreCardAction implements Action {
-
-    private static final long serialVersionUID = 1L;
 
     private AbstractBuild<?, ?> build;
 
@@ -49,7 +42,7 @@ public class ScoreCardAction implements Action {
     }
 
     public String getUrlName() {
-        return "cigame"; //$NON-NLS-1$
+        return "ci-game"; //$NON-NLS-1$
     }
 
     @Exported

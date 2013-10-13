@@ -19,7 +19,7 @@ public class Assert {
         ScoreCard scorecard = build.getAction(ScoreCardAction.class).getScorecard();
         double pointsForRule = 0;
         for (Score score : scorecard.getScores()) {
-            if (score.getRulesetName().equalsIgnoreCase(rulesetName)) {
+            if (score.getRuleSetName().equalsIgnoreCase(rulesetName)) {
                 pointsForRule += score.getValue();
             }
         }

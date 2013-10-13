@@ -1,12 +1,5 @@
 package hudson.plugins.cigame;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
@@ -14,23 +7,22 @@ import hudson.model.User;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
-import hudson.util.VersionNumber;
-
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
+import java.io.IOException;
+import java.util.*;
+
 /**
  * Leader board for users participaing in the game.
- * 
+ *
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
 @Extension
 public class LeaderBoardAction implements RootAction, AccessControlled {
-
-    private static final long serialVersionUID = 1L;
 
     public String getDisplayName() {
         return Messages.Leaderboard_Title();
@@ -41,22 +33,17 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     public String getUrlName() {
-        return "/cigame"; //$NON-NLS-1$
+        return "/ci-game"; //$NON-NLS-1$
     }
 
     /**
      * Returns the user that are participants in the ci game
-     * 
+     *
      * @return list containing users.
      */
     @Exported
     public List<UserScore> getUserScores() {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
-    }
-    
-    @Exported
-    public boolean isUserAvatarSupported() {
-        return new VersionNumber(Hudson.VERSION).isNewerThan(new VersionNumber("1.433"));
     }
 
     List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCasesensitive) {
@@ -75,7 +62,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
             }
             players = playerList;
         }
-        
+
         for (User user : players) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if ((property != null) && property.isParticipatingInGame()) {
@@ -96,7 +83,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         return list;
     }
 
-    public void doResetScores( StaplerRequest req, StaplerResponse rsp ) throws IOException {
+    public void doResetScores(StaplerRequest req, StaplerResponse rsp) throws IOException {
         if (Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
             doResetScores(User.getAll());
         }
@@ -113,7 +100,18 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         }
     }
 
-    
+    public ACL getACL() {
+        return Hudson.getInstance().getACL();
+    }
+
+    public void checkPermission(Permission p) {
+        getACL().checkPermission(p);
+    }
+
+    public boolean hasPermission(Permission p) {
+        return getACL().hasPermission(p);
+    }
+
     @ExportedBean(defaultVisibility = 999)
     public class UserScore {
         private User user;
@@ -141,17 +139,5 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         public String getDescription() {
             return description;
         }
-    }
-
-    public ACL getACL() {
-        return Hudson.getInstance().getACL();
-    }
-
-    public void checkPermission(Permission p) {
-        getACL().checkPermission(p);
-    }
-
-    public boolean hasPermission(Permission p) {
-        return getACL().hasPermission(p);
     }
 }

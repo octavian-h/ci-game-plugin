@@ -7,7 +7,7 @@ public class OpenTasksRuleSet extends PluginRuleSet {
 
     public OpenTasksRuleSet() {
         super("tasks", Messages.OpenTasksRuleSet_Title()); //$NON-NLS-1$
-    } 
+    }
 
     @Override
     protected void loadRules() {

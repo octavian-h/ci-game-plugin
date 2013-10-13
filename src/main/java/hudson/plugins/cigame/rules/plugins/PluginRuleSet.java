@@ -1,10 +1,10 @@
 package hudson.plugins.cigame.rules.plugins;
 
-import java.util.Collection;
-
 import hudson.model.Hudson;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleSet;
+
+import java.util.Collection;
 
 /**
  * Rule set for plugins rules that will check if the plugin is installed or not.
@@ -12,13 +12,13 @@ import hudson.plugins.cigame.model.RuleSet;
 public class PluginRuleSet extends RuleSet {
 
     private String pluginName;
-    private transient boolean isInitalized = false;
+    private transient boolean isInitialized = false;
 
     /**
      * Construct a rule set for a plugin.
-     * 
+     *
      * @param pluginName the name of the plugin as it is known by Hudson.
-     * @param name the text name of the rule set, as it will be displayed.
+     * @param name       the text name of the rule set, as it will be displayed.
      */
     public PluginRuleSet(String pluginName, String name) {
         super(name);
@@ -27,7 +27,7 @@ public class PluginRuleSet extends RuleSet {
 
     /**
      * Returns if the plugin is installed or not.
-     * 
+     *
      * @return true, if the plugin is installed; false otherwise.
      */
     @Override
@@ -39,14 +39,14 @@ public class PluginRuleSet extends RuleSet {
      * Late loading of the rules for this rule set.
      */
     protected void loadRules() {
-        isInitalized = true;
+        isInitialized = true;
     }
 
     @Override
     public Collection<Rule> getRules() {
-        if (!isInitalized) {
+        if (!isInitialized) {
             loadRules();
-            isInitalized = true;
+            isInitialized = true;
         }
         return super.getRules();
     }

@@ -5,17 +5,16 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 /**
  * Recorded score for a rule and build.
- * 
  */
-@ExportedBean(defaultVisibility=999)
+@ExportedBean(defaultVisibility = 999)
 public class Score implements Comparable<Score> {
-    private final String rulesetName;
+    private final String ruleSetName;
     private final String ruleName;
     private final double value;
     private final String description;
 
-    public Score(String rulesetName, String ruleName, double points, String pointDescription) {
-        this.rulesetName = rulesetName;
+    public Score(String ruleSetName, String ruleName, double points, String pointDescription) {
+        this.ruleSetName = ruleSetName;
         this.ruleName = ruleName;
         this.value = points;
         description = pointDescription;
@@ -24,14 +23,14 @@ public class Score implements Comparable<Score> {
     @Exported
     public String getDescription() {
         if (description == null) {
-            return rulesetName + " - " + ruleName; //$NON-NLS-1$
+            return ruleSetName + " - " + ruleName; //$NON-NLS-1$
         }
         return description;
     }
 
     @Exported
-    public String getRulesetName() {
-        return rulesetName;
+    public String getRuleSetName() {
+        return ruleSetName;
     }
 
     @Exported

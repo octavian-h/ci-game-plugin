@@ -12,7 +12,7 @@ public class ResultSequenceValidator {
 
     private final int sequenceLength;
     private final Result resultThreshold;
-    
+
     public ResultSequenceValidator(Result resultThreshold, int sequenceLength) {
         this.resultThreshold = resultThreshold;
         this.sequenceLength = sequenceLength;
@@ -20,10 +20,11 @@ public class ResultSequenceValidator {
 
     /**
      * Returns true if the build sequence meets the requirements
+     *
      * @param build latest build in sequence
      * @return true, if the build sequence conforms to the requirements set in constructor; false, otherwise.
      */
-    public boolean isValid(AbstractBuild<?,?> build) {
+    public boolean isValid(AbstractBuild<?, ?> build) {
         int buildCount = 0;
         while (buildCount < sequenceLength) {
             if ((build == null) || build.getResult().isWorseThan(resultThreshold)) {

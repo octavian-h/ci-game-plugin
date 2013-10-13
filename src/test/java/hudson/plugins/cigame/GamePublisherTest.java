@@ -1,14 +1,5 @@
 package hudson.plugins.cigame;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Action;
 import hudson.model.User;
@@ -18,9 +9,16 @@ import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
-
 import org.junit.Test;
 import org.jvnet.hudson.test.Bug;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings("unchecked")
 public class GamePublisherTest {
@@ -32,7 +30,7 @@ public class GamePublisherTest {
         when(build.getActions()).thenReturn(actions);
 
         assertThat(new GamePublisher().perform(build, new RuleBook(), true, null), is(false));
-        
+
         verify(build).getActions();
         verify(actions).add(isA(ScoreCardAction.class));
         verify(build).getChangeSet();
@@ -53,7 +51,7 @@ public class GamePublisherTest {
     @Test
     public void assertUserScorePropertyIsAddedToUserThatDoesNotHaveIt() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
-        User userWithoutProperty = createUser(null);        
+        User userWithoutProperty = createUser(null);
         mockChangeSetInBuild(build, userWithoutProperty);
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
@@ -65,13 +63,13 @@ public class GamePublisherTest {
     public void assertThatUserDoesNotReciveDoublePointsIfUserExistInSeveralChangeSetEntries() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
         UserScoreProperty property = new UserScoreProperty(10d, true, null);
-        User user = createUser(property);        
+        User user = createUser(property);
         mockChangeSetInBuild(build, user, user);
 
         assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
         assertThat(property.getScore(), is(15d));
     }
-    
+
     @Test
     public void assertUsersNamesWithDifferentCasingIsReportedAsPointsForOneUser() throws Exception {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -83,7 +81,7 @@ public class GamePublisherTest {
         assertThat(propertyOne.getScore(), is(15d));
         assertThat("Points were added to both users", propertyTwo.getScore(), is(20d));
     }
-    
+
 //    @Test
 //    public void assertUsersAreLookedUpCaseInsensitive() throws Exception {
 //        AbstractBuild build = mock(AbstractBuild.class);
@@ -109,11 +107,11 @@ public class GamePublisherTest {
         when(changeset.iterator()).thenReturn(changesetList.iterator());
         when(build.getChangeSet()).thenReturn(changeset);
     }
-    
+
     private User createUser(UserScoreProperty property) {
         return createUser(property, "ignored-" + System.currentTimeMillis());
     }
-    
+
     private User createUser(UserScoreProperty property, String name) {
         User user = mock(User.class);
         when(user.getId()).thenReturn(name);
@@ -122,14 +120,14 @@ public class GamePublisherTest {
         }
         return user;
     }
-    
+
     private Entry createEntry(User author) {
         Entry entry = mock(Entry.class);
         when(entry.getAuthor()).thenReturn(author);
         return entry;
     }
-    
-    private static class RuleImpl implements Rule {
+
+    private static class RuleImpl implements Rule<Void> {
 
         private final RuleResult ruleResult;
 
@@ -137,12 +135,13 @@ public class GamePublisherTest {
             this.ruleResult = ruleResult;
         }
 
-        public RuleResult evaluate(AbstractBuild<?, ?> build) {
-            return ruleResult;
-        }
-
         public String getName() {
             return "impl";
+        }
+
+        @Override
+        public RuleResult evaluate(AbstractBuild<?, ?> previousBuild, AbstractBuild<?, ?> build) {
+            return ruleResult;
         }
     }
 }

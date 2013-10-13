@@ -11,10 +11,9 @@ import hudson.plugins.pmd.PmdResultAction;
 
 import java.util.List;
 
-public class DefaultPmdRule implements Rule {
+public class DefaultPmdRule implements Rule<Void> {
     private int pointsForAddingAnAnnotation;
     private int pointsForRemovingAnAnnotation;
-
     private Priority tasksPriority;
 
     public DefaultPmdRule(Priority tasksPriority, int pointsForAddingAnAnnotation, int pointsForRemovingAnAnnotation) {
@@ -23,27 +22,27 @@ public class DefaultPmdRule implements Rule {
         this.pointsForRemovingAnAnnotation = pointsForRemovingAnAnnotation;
     }
 
-    public RuleResult evaluate(AbstractBuild<?, ?> build) {
-        
+    @Override
+    public RuleResult evaluate(AbstractBuild<?, ?> previousBuild, AbstractBuild<?, ?> build) {
         if (new ResultSequenceValidator(Result.UNSTABLE, 2).isValid(build)) {
             List<List<PmdResultAction>> sequence = new ActionSequenceRetriever<PmdResultAction>(PmdResultAction.class, 2).getSequence(build);
             if ((sequence != null)
-                    && hasNoErrors(sequence.get(0)) && hasNoErrors(sequence.get(1))){
+                    && hasNoErrors(sequence.get(0)) && hasNoErrors(sequence.get(1))) {
                 int delta = getNumberOfAnnotations(sequence.get(0)) - getNumberOfAnnotations(sequence.get(1));
 
                 if (delta < 0) {
-                    return new RuleResult(Math.abs(delta) * pointsForRemovingAnAnnotation, 
+                    return new RuleResult(Math.abs(delta) * pointsForRemovingAnAnnotation,
                             Messages.PmdRuleSet_DefaultRule_FixedWarningsCount(Math.abs(delta), tasksPriority.name())); //$NON-NLS-1$
                 }
                 if (delta > 0) {
-                    return new RuleResult(Math.abs(delta) * pointsForAddingAnAnnotation, 
+                    return new RuleResult(Math.abs(delta) * pointsForAddingAnAnnotation,
                             Messages.PmdRuleSet_DefaultRule_NewWarningsCount(Math.abs(delta), tasksPriority.name())); //$NON-NLS-1$
                 }
             }
         }
         return RuleResult.EMPTY_RESULT;
     }
-    
+
     private boolean hasNoErrors(List<PmdResultAction> actions) {
         for (PmdResultAction action : actions) {
             if (action.getResult().hasError()) {
@@ -61,6 +60,7 @@ public class DefaultPmdRule implements Rule {
         return numberOfAnnotations;
     }
 
+    @Override
     public String getName() {
         return Messages.PmdRuleSet_DefaultRule_Name(tasksPriority.name()); //$NON-NLS-1$
     }

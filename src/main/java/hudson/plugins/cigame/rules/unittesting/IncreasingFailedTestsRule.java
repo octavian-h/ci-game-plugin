@@ -18,36 +18,37 @@ public class IncreasingFailedTestsRule extends AbstractUnitTestsRule {
         pointsForEachNewFailure = points;
     }
 
+    @Override
     public String getName() {
-        return Messages.UnitTestingRuleSet_IncreasingFailedRule_Name(); 
+        return Messages.UnitTestingRuleSet_IncreasingFailedRule_Name();
     }
 
     RuleResult<Integer> evaluate(
-        int currentFailCount, int previousFailCount) {
+            int currentFailCount, int previousFailCount) {
         int failingTestDiff = currentFailCount - previousFailCount;
         if (failingTestDiff > 0) {
-            return new RuleResult<Integer>(failingTestDiff * pointsForEachNewFailure, 
+            return new RuleResult<Integer>(failingTestDiff * pointsForEachNewFailure,
                     Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(failingTestDiff),
-                    failingTestDiff); 
+                    failingTestDiff);
         }
         return null;
     }
-    
-	@Override
-	@SuppressWarnings("unchecked")
-	protected RuleResult evaluate(
-			AbstractTestResultAction testResult,
-			AbstractTestResultAction previousTestResult) {
-		if (testResult == null) {
-			return null;
-		}
-		
-		return evaluate(
-				testResult.getFailCount(), previousTestResult.getFailCount());
-	}
 
-	@Override
-	protected String getResultDescription(Integer testDiff) {
-		return Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(testDiff);
-	}
+    @Override
+    @SuppressWarnings("unchecked")
+    protected RuleResult evaluate(
+            AbstractTestResultAction testResult,
+            AbstractTestResultAction previousTestResult) {
+        if (testResult == null) {
+            return null;
+        }
+
+        return evaluate(
+                testResult.getFailCount(), previousTestResult.getFailCount());
+    }
+
+    @Override
+    protected String getResultDescription(Integer testDiff) {
+        return Messages.UnitTestingRuleSet_IncreasingFailedRule_Count(testDiff);
+    }
 }

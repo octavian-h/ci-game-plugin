@@ -1,14 +1,5 @@
 package hudson.plugins.cigame.rules.plugins.violation;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
-import static org.hamcrest.core.Is.is;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
 import hudson.plugins.cigame.model.RuleResult;
@@ -16,9 +7,19 @@ import hudson.plugins.violations.TypeSummary;
 import hudson.plugins.violations.ViolationsBuildAction;
 import hudson.plugins.violations.ViolationsReport;
 import hudson.plugins.violations.ViolationsReport.TypeReport;
-
 import org.junit.Test;
 import org.jvnet.hudson.test.Bug;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class DefaultViolationRuleTest {
@@ -28,7 +29,7 @@ public class DefaultViolationRuleTest {
         when(build.getResult()).thenReturn(Result.FAILURE);
 
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
-        RuleResult ruleResult = rule.evaluate(build);
+        RuleResult ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
@@ -51,7 +52,7 @@ public class DefaultViolationRuleTest {
         when(build.getActions(ViolationsBuildAction.class)).thenReturn(actionList);
 
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
-        RuleResult ruleResult = rule.evaluate(build);
+        RuleResult ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
@@ -63,7 +64,7 @@ public class DefaultViolationRuleTest {
         when(build.getPreviousBuild()).thenReturn(null);
         
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
-        RuleResult ruleResult = rule.evaluate(build);
+        RuleResult ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
@@ -86,7 +87,7 @@ public class DefaultViolationRuleTest {
         when(build.getActions(ViolationsBuildAction.class)).thenReturn(Arrays.asList(currentAction));
         when(currentAction.getReport()).thenReturn(currentReport);
 
-        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(build);
+        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 5000", ruleResult.getPoints(), is(5000d));
     }
@@ -105,7 +106,7 @@ public class DefaultViolationRuleTest {
         ViolationsReport currentReport = createViolationsReportStub("pmd", 100, previousReport);
         when(action.getReport()).thenReturn(currentReport);
 
-        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(build);
+        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
@@ -129,7 +130,7 @@ public class DefaultViolationRuleTest {
         when(build.getActions(ViolationsBuildAction.class)).thenReturn(Arrays.asList(currentAction));
         when(currentAction.getReport()).thenReturn(currentReport);
 
-        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(build);
+        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
@@ -154,7 +155,7 @@ public class DefaultViolationRuleTest {
         when(build.getActions(ViolationsBuildAction.class)).thenReturn(Arrays.asList(currentAction));
         when(currentAction.getReport()).thenReturn(currentReport);
 
-        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(build);
+        RuleResult ruleResult = new DefaultViolationRule("pmd", "PMD violations", 100, -100).evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }

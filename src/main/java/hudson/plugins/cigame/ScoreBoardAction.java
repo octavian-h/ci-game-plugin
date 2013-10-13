@@ -9,8 +9,6 @@ import hudson.model.Action;
  */
 public class ScoreBoardAction implements Action {
 
-    private static final long serialVersionUID = 1L;
-
     public String getDisplayName() {
         return Messages.Scorecard_Title();
     }
@@ -20,7 +18,7 @@ public class ScoreBoardAction implements Action {
     }
 
     public String getUrlName() {
-        return "cigame"; //$NON-NLS-1$
+        return "ci-game"; //$NON-NLS-1$
     }
 
 }

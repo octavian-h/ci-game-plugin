@@ -6,7 +6,7 @@ public class WarningsRuleSet extends PluginRuleSet {
 
     public WarningsRuleSet() {
         super("warnings", Messages.WarningsRuleSet_Title()); //$NON-NLS-1$ //$NON-NLS-2$
-    } 
+    }
 
     @Override
     protected void loadRules() {

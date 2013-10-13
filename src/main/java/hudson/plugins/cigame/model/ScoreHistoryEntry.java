@@ -78,8 +78,7 @@ public class ScoreHistoryEntry {
 
         ScoreHistoryEntry that = (ScoreHistoryEntry) o;
 
-        if (Double.compare(that.awardedScore, awardedScore) != 0) return false;
-        return Objects.equal(this.awardingRuns, that.awardingRuns);
+        return Double.compare(that.awardedScore, awardedScore) == 0 && Objects.equal(this.awardingRuns, that.awardingRuns);
     }
 
     @Override

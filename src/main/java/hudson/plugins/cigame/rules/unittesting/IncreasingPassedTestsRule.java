@@ -19,48 +19,49 @@ public class IncreasingPassedTestsRule extends AbstractUnitTestsRule {
     }
 
     RuleResult<Integer> evaluate(
-        int currentTotalCount, int currentFailCount, int currentSkipCount,
-        int previousTotalCount, int previousFailCount, int previousSkipCount) {
-        
+            int currentTotalCount, int currentFailCount, int currentSkipCount,
+            int previousTotalCount, int previousFailCount, int previousSkipCount) {
+
         int passedTestDiff = (currentTotalCount - currentFailCount - currentSkipCount)
-        	- (previousTotalCount - previousFailCount - previousSkipCount);
-        
+                - (previousTotalCount - previousFailCount - previousSkipCount);
+
         // ignore any tests which were just 'unskipped'
         if (currentSkipCount < previousSkipCount) {
-        	passedTestDiff = passedTestDiff - (previousSkipCount - currentSkipCount);
+            passedTestDiff = passedTestDiff - (previousSkipCount - currentSkipCount);
         }
-        
+
         // passedTestDiff may now be 0 or even negative. Count at least all
         // those tests which were fixed
         passedTestDiff = Math.max(passedTestDiff, previousFailCount - currentFailCount);
-        
+
         if (passedTestDiff > 0) {
-            return new RuleResult<Integer>(passedTestDiff * pointsForEachFixedFailure, 
+            return new RuleResult<Integer>(passedTestDiff * pointsForEachFixedFailure,
                     Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(passedTestDiff),
-                    passedTestDiff); 
+                    passedTestDiff);
         }
         return null;
     }
 
+    @Override
     public String getName() {
-        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name(); 
+        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Name();
     }
 
-	@Override
-	protected RuleResult<Integer> evaluate(
-			AbstractTestResultAction<?> testResult,
-			AbstractTestResultAction<?> previousTestResult) {
-		if (testResult == null) {
-			return null;
-		}
-		
-		return evaluate(
-				testResult.getTotalCount(), testResult.getFailCount(), testResult.getSkipCount(),
-				previousTestResult.getTotalCount(), previousTestResult.getFailCount(), previousTestResult.getSkipCount());
-	}
+    @Override
+    protected RuleResult<Integer> evaluate(
+            AbstractTestResultAction<?> testResult,
+            AbstractTestResultAction<?> previousTestResult) {
+        if (testResult == null) {
+            return null;
+        }
 
-	@Override
-	protected String getResultDescription(Integer testDiff) {
-		return Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(testDiff);
-	}
+        return evaluate(
+                testResult.getTotalCount(), testResult.getFailCount(), testResult.getSkipCount(),
+                previousTestResult.getTotalCount(), previousTestResult.getFailCount(), previousTestResult.getSkipCount());
+    }
+
+    @Override
+    protected String getResultDescription(Integer testDiff) {
+        return Messages.UnitTestingRuleSet_IncreasingPassedRule_Count(testDiff);
+    }
 }

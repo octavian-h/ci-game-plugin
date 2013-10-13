@@ -5,7 +5,7 @@ import java.util.Collection;
 
 /**
  * Class containing one or more rules
- * 
+ *
  * @author Erik Ramfelt
  */
 public class RuleSet {
@@ -27,7 +27,7 @@ public class RuleSet {
      * Returns if the rule set is available or not. If a rule set is not
      * available then it will not be used for determining the score for a build
      * Default implementation returns true.
-     * 
+     *
      * @return true
      */
     public boolean isAvailable() {
@@ -36,7 +36,7 @@ public class RuleSet {
 
     /**
      * Returns the name of the rule set.
-     * 
+     *
      * @return the name of the rule set.
      */
     public String getName() {
@@ -45,7 +45,7 @@ public class RuleSet {
 
     /**
      * Returns the rules for this rule set.
-     * 
+     *
      * @return the rules for this rule set.
      */
     public Collection<Rule> getRules() {
@@ -54,7 +54,7 @@ public class RuleSet {
 
     /**
      * Add rule to the rule set
-     * 
+     *
      * @param rule rule to add to the set.
      */
     public void add(Rule rule) {
@@ -63,7 +63,7 @@ public class RuleSet {
 
     /**
      * Remove rule from the rule set.
-     * 
+     *
      * @param rule the rule to remove.
      */
     public void removeRule(Rule rule) {

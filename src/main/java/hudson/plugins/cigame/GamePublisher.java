@@ -1,25 +1,19 @@
 package hudson.plugins.cigame;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.Action;
-import hudson.model.BuildListener;
-import hudson.model.Result;
-import hudson.model.User;
+import hudson.model.*;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.ScoreCard;
 import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class GamePublisher extends Notifier {
 
@@ -72,7 +66,7 @@ public class GamePublisher extends Notifier {
         	previousBuild = previousBuild.getPreviousBuild();
         }
         
-        Set<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new UsernameCaseinsensitiveComparator());
+        Set<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new CaseInsensitiveUserIdComparator());
         for (AbstractBuild<?, ?> b : accountableBuilds) {
         	ChangeLogSet<? extends Entry> changeSet = b.getChangeSet();
         	if (changeSet != null) {
@@ -112,11 +106,11 @@ public class GamePublisher extends Notifier {
         return (!players.isEmpty());
     }
 
-    public static class UsernameCaseinsensitiveComparator implements Comparator<User> {
-        public int compare(User arg0, User arg1) {
-            return arg0.getId().compareToIgnoreCase(arg1.getId());
-        }
-    }
+//    public static class UsernameCaseinsensitiveComparator implements Comparator<User> {
+//        public int compare(User arg0, User arg1) {
+//            return arg0.getId().compareToIgnoreCase(arg1.getId());
+//        }
+//    }
 
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.BUILD;
