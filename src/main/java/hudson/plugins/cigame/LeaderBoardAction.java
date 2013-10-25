@@ -4,6 +4,7 @@ import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
 import hudson.model.User;
+import hudson.plugins.cigame.model.Character;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
@@ -110,6 +111,22 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
 
     public boolean hasPermission(Permission p) {
         return getACL().hasPermission(p);
+    }
+
+    @Exported
+    public List<hudson.plugins.cigame.model.Character> getCharacters() {
+        Character colonel = new Character("Colonel", "/plugin/ci-game/images/colonel.png");
+        Character general = new Character("Genral", "/plugin/ci-game/images/general.png");
+        List<Character> images = new ArrayList<Character>();
+        images.add(colonel);
+        images.add(general);
+        return images;
+    }
+
+    @Exported
+    public List<UserScore> getUserScoresByCharacter(Character rank) {
+        return null;
+        //getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
 
     @ExportedBean(defaultVisibility = 999)

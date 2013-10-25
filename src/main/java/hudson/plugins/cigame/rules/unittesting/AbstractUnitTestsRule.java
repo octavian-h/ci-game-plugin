@@ -128,10 +128,6 @@ public abstract class AbstractUnitTestsRule implements AggregatableRule<Integer>
         }
         return null;
 	}
-    
-	public final RuleResult<Integer> evaluate(AbstractBuild<?, ?> build) {
-		throw new UnsupportedOperationException();
-	}
 	
 	protected abstract String getResultDescription(Integer testDiff);
     

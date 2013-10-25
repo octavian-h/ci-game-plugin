@@ -2,15 +2,15 @@ package hudson.plugins.cigame.model;
 
 /**
  * @author hasna
- * @since 1.0-SNAPSHOT
+ * @since 1.20-SNAPSHOT
  */
 public class Character {
     private String name;
-    private String url;
+    private String imageUrl;
 
-    public Character(String name, String url) {
+    public Character(String name, String imageUrl) {
         this.name = name;
-        this.url = url;
+        this.imageUrl = imageUrl;
     }
 
     public String getName() {
@@ -21,11 +21,11 @@ public class Character {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

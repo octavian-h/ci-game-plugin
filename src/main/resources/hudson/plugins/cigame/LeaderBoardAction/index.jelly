@@ -18,7 +18,7 @@
                         <td class="pane-header" align="left,center">${%Leaderboard.Description}</td>
                         <td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>
                     </tr>
-                    <j:forEach var="userscore" items="${it.userScores}">
+                    <j:forEach var="userscore" items="${it.getUserScores()}">
                         <tr>
                             <td>
                                 <img src="${h.getAvatar(userscore.user,iconSize)}" alt="${userscore.user} icon"/>

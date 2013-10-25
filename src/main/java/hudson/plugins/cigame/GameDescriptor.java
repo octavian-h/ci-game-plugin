@@ -1,7 +1,10 @@
 package hudson.plugins.cigame;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import hudson.Extension;
 import hudson.model.AbstractProject;
+import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
@@ -17,6 +20,11 @@ import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.StaplerRequest;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.List;
+
 // Config page for the application (descriptor of the game plugin)
 @Extension
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
@@ -25,7 +33,6 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
     private transient RuleBook rulebook;
     private boolean namesAreCaseSensitive = true;
-    
     private int passedTestIncreasingPoints = 1;
     private int passedTestDecreasingPoints = 0;
     private int failedTestIncreasingPoints = -1;
@@ -85,7 +92,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
         save();
         return true;
     }
-    
+
     public boolean getNamesAreCaseSensitive() {
         return namesAreCaseSensitive;
     }
@@ -99,64 +106,80 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
         return true;
     }
 
-    
     public int getPassedTestIncreasingPoints() {
         return passedTestIncreasingPoints;
     }
 
-    
     public void setPassedTestIncreasingPoints(int passedTestIncreasingPoints) {
         this.passedTestIncreasingPoints = passedTestIncreasingPoints;
     }
 
-    
     public int getPassedTestDecreasingPoints() {
         return passedTestDecreasingPoints;
     }
 
-    
     public void setPassedTestDecreasingPoints(int passedTestDecreasingPoints) {
         this.passedTestDecreasingPoints = passedTestDecreasingPoints;
     }
 
-    
     public int getFailedTestIncreasingPoints() {
         return failedTestIncreasingPoints;
     }
 
-    
     public void setFailedTestIncreasingPoints(int failedTestIncreasingPoints) {
         this.failedTestIncreasingPoints = failedTestIncreasingPoints;
     }
 
-    
     public int getFailedTestDecreasingPoints() {
         return failedTestDecreasingPoints;
     }
 
-    
     public void setFailedTestDecreasingPoints(int failedTestDecreasingPoints) {
         this.failedTestDecreasingPoints = failedTestDecreasingPoints;
     }
 
-    
     public int getSkippedTestIncreasingPoints() {
         return skippedTestIncreasingPoints;
     }
 
-    
     public void setSkippedTestIncreasingPoints(int skippedTestIncreasingPoints) {
         this.skippedTestIncreasingPoints = skippedTestIncreasingPoints;
     }
 
-    
     public int getSkippedTestDecreasingPoints() {
         return skippedTestDecreasingPoints;
     }
 
-    
     public void setSkippedTestDecreasingPoints(int skippedTestDecreasingPoints) {
         this.skippedTestDecreasingPoints = skippedTestDecreasingPoints;
+    }
+
+    public String exportScores() {
+        LeaderBoardAction page = new LeaderBoardAction();
+        Gson gson = new Gson();
+        return gson.toJson(page.getUserScores());
+    }
+
+    public void importScores(String json) {
+        LeaderBoardAction page = new LeaderBoardAction();
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<List<LeaderBoardAction.UserScore>>() {
+        }.getType();
+        Collection<User> users = User.getAll();
+
+        List<LeaderBoardAction.UserScore> list = gson.fromJson("", collectionType);
+        for (LeaderBoardAction.UserScore userScore : list) {
+            UserScoreProperty property = new UserScoreProperty(userScore.getScore(), true, null);
+            for (User user : users) {
+                if (user.getId().equals(property.getUser().getId())){
+                    try {
+                        user.addProperty(property);
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }
+        }
     }
 
 }
