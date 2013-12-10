@@ -39,12 +39,12 @@ public class BuildResultRule implements Rule<Void> {
 
     RuleResult<Void> evaluate(Result result, Result lastResult) {
         if (result == Result.SUCCESS) {
-            return new RuleResult(successPoints, Messages.BuildRuleSet_BuildSuccess()); //$NON-NLS-1$
+            return new RuleResult<Void>(successPoints, Messages.BuildRuleSet_BuildSuccess()); //$NON-NLS-1$
         }
         if (result == Result.FAILURE) {
             if ((lastResult == null)
                     || (lastResult.isBetterThan(Result.FAILURE))) {
-                return new RuleResult(failurePoints, Messages.BuildRuleSet_BuildFailed()); //$NON-NLS-1$
+                return new RuleResult<Void>(failurePoints, Messages.BuildRuleSet_BuildFailed()); //$NON-NLS-1$
             }
         }
         return null;

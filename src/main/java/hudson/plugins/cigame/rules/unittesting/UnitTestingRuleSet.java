@@ -7,7 +7,7 @@ import hudson.plugins.cigame.model.RuleSet;
  * PassedTests<br/>
  * FailedTests<br/>
  * SkippedTests<br/>
- * 
+ *
  * @author Unknown
  * @author <a href="www.digizol.com">Kamal Mettananda</a>
  * @since 1.20

@@ -1,11 +1,5 @@
 package hudson.plugins.cigame.rules.plugins.opentasks;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import hudson.maven.MavenBuild;
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
@@ -14,21 +8,26 @@ import hudson.plugins.analysis.util.model.Priority;
 import hudson.plugins.cigame.model.RuleResult;
 import hudson.plugins.tasks.TasksResult;
 import hudson.plugins.tasks.TasksResultAction;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class DefaultOpenTasksRuleTest {
-    
+
     @Test
     public void assertFailedBuildsIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class); 
+        AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         addOpenTasks(build, 3);
-        
-        AbstractBuild previousBuild = mock(AbstractBuild.class); 
+
+        AbstractBuild previousBuild = mock(AbstractBuild.class);
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         addOpenTasks(previousBuild, 5);
 
@@ -37,10 +36,10 @@ public class DefaultOpenTasksRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
-    
+
     @Test
     public void assertNoPreviousBuildIsWorthZeroPoints() {
-        AbstractBuild build = mock(AbstractBuild.class); 
+        AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.FAILURE);
         when(build.getPreviousBuild()).thenReturn(null);
         addOpenTasks(build, 3);
@@ -50,7 +49,7 @@ public class DefaultOpenTasksRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
-    
+
     @Test
     public void assertIfPreviousBuildFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -61,12 +60,12 @@ public class DefaultOpenTasksRuleTest {
         TasksResult result = mock(TasksResult.class);
         TasksResult previosResult = mock(TasksResult.class);
         TasksResultAction action = new TasksResultAction(build, mock(HealthDescriptor.class), result);
-        TasksResultAction previousAction = new TasksResultAction(previousBuild,mock(HealthDescriptor.class), previosResult);
+        TasksResultAction previousAction = new TasksResultAction(previousBuild, mock(HealthDescriptor.class), previosResult);
         when(build.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(action));
         when(build.getAction(TasksResultAction.class)).thenReturn(action);
         when(previousBuild.getAction(TasksResultAction.class)).thenReturn(previousAction);
         when(previousBuild.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(previousAction));
-        
+
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(15);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
@@ -74,7 +73,7 @@ public class DefaultOpenTasksRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
-    
+
     @Test
     public void assertIfPreviousBuildHasErrorsResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -86,10 +85,10 @@ public class DefaultOpenTasksRuleTest {
         TasksResult previosResult = mock(TasksResult.class);
         when(previosResult.hasError()).thenReturn(true);
         TasksResultAction action = new TasksResultAction(build, mock(HealthDescriptor.class), result);
-        TasksResultAction previousAction = new TasksResultAction(previousBuild,mock(HealthDescriptor.class), previosResult);
+        TasksResultAction previousAction = new TasksResultAction(previousBuild, mock(HealthDescriptor.class), previosResult);
         when(build.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(action));
         when(previousBuild.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(previousAction));
-        
+
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(15);
         when(previosResult.getNumberOfAnnotations(Priority.LOW)).thenReturn(10);
 
@@ -97,34 +96,34 @@ public class DefaultOpenTasksRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
-    
+
     @Test
     public void assertNewMavenModuleGivesNegativePoints() {
-    	AbstractBuild build = mock(MavenBuild.class); 
+        AbstractBuild build = mock(MavenBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
         addOpenTasks(build, 3);
-        
+
         RuleResult ruleResult = new DefaultOpenTasksRule(Priority.LOW, -1, 1).evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be -3", ruleResult.getPoints(), is(-3d));
     }
-    
+
     @Test
     public void assertRemovedMavenModuleGivesPositivePoints() {
-    	AbstractBuild previousBuild = mock(MavenBuild.class); 
+        AbstractBuild previousBuild = mock(MavenBuild.class);
         when(previousBuild.getResult()).thenReturn(Result.SUCCESS);
         addOpenTasks(previousBuild, 3);
-        
+
         RuleResult ruleResult = new DefaultOpenTasksRule(Priority.LOW, -1, 1).evaluate(previousBuild, null);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 3", ruleResult.getPoints(), is(3d));
     }
-    
+
     private static void addOpenTasks(AbstractBuild build, int numberOfTasks) {
-    	TasksResult result = mock(TasksResult.class);
+        TasksResult result = mock(TasksResult.class);
         TasksResultAction action = new TasksResultAction(build, mock(HealthDescriptor.class), result);
         when(build.getActions(TasksResultAction.class)).thenReturn(Arrays.asList(action));
-        
+
         when(result.getNumberOfAnnotations(Priority.LOW)).thenReturn(numberOfTasks);
     }
 }

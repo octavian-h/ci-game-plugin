@@ -1,12 +1,12 @@
 package hudson.plugins.cigame.rules.unittesting;
 
-import jenkins.model.Jenkins;
 import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.RuleResult;
+import jenkins.model.Jenkins;
 
 /**
  * Rule that gives points for decreasing the number of failed tests. By default 0 mark given.
- * 
+ *
  * @author <a href="www.digizol.com">Kamal Mettananda</a>
  * @since 1.20
  */
@@ -16,7 +16,7 @@ public class DecreasingFailedTestsRule extends AbstractFailedTestsRule {
 
     private int getPoints() {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
-        return gameDescriptor!=null?gameDescriptor.getFailedTestDecreasingPoints():DEFAULT_POINTS;
+        return gameDescriptor != null ? gameDescriptor.getFailedTestDecreasingPoints() : DEFAULT_POINTS;
     }
 
     public String getName() {
@@ -33,8 +33,8 @@ public class DecreasingFailedTestsRule extends AbstractFailedTestsRule {
         if (failedTestDiff < 0) {
             failedTestDiff = -failedTestDiff;
             return new RuleResult<Integer>(failedTestDiff * getPoints(),
-                                           Messages.UnitTestingRuleSet_DecreasingFailedRule_Count(failedTestDiff),
-                                           failedTestDiff);
+                    Messages.UnitTestingRuleSet_DecreasingFailedRule_Count(failedTestDiff),
+                    failedTestDiff);
         }
         return null;
     }

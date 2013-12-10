@@ -14,14 +14,13 @@ import java.util.*;
 
 /**
  * Score card for a certain build
- * 
+ *
  * @author Erik Ramfelt
  */
 @ExportedBean(defaultVisibility = 999)
 public class ScoreCardAction implements Action {
 
     private AbstractBuild<?, ?> build;
-
     private ScoreCard scorecard;
 
     public ScoreCardAction(ScoreCard scorecard, AbstractBuild<?, ?> b) {
@@ -54,27 +53,21 @@ public class ScoreCardAction implements Action {
     public Collection<User> getParticipants() {
         return getParticipants(Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
-    
-    Collection<User> getParticipants(boolean usernameIsCasesensitive) {
-        Comparator<User> userIdComparator = new CaseInsensitiveUserIdComparator();
+
+    Collection<User> getParticipants(boolean usernameIsCaseSensitive) {
+        Comparator<User> userIdComparator = new UserIdComparator(usernameIsCaseSensitive);
         List<User> players = new ArrayList<User>();
         ChangeLogSet<? extends Entry> changeSet = build.getChangeSet();
         for (Entry entry : changeSet) {
             User user = entry.getAuthor();
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
-            if ((property != null) 
-                    && property.isParticipatingInGame() 
-                    && (usernameIsCasesensitive || Collections.binarySearch(players, user, userIdComparator) < 0)) {
+            if ((property != null)
+                    && property.isParticipatingInGame()
+                    && Collections.binarySearch(players, user, userIdComparator) < 0) {
                 players.add(user);
             }
         }
-        Collections.sort(players, new UserDisplayNameComparator());
+        Collections.sort(players, new UserNameComparator());
         return players;
-    }
-    
-    private static class UserDisplayNameComparator implements Comparator<User> {
-        public int compare(User arg0, User arg1) {
-            return arg0.getDisplayName().compareToIgnoreCase(arg1.getDisplayName());
-        }            
     }
 }

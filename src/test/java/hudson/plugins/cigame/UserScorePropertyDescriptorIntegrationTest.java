@@ -1,10 +1,8 @@
 package hudson.plugins.cigame;
 
-import hudson.model.User;
-
-import org.jvnet.hudson.test.HudsonTestCase;
-
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import hudson.model.User;
+import org.jvnet.hudson.test.HudsonTestCase;
 
 public class UserScorePropertyDescriptorIntegrationTest extends HudsonTestCase {
 

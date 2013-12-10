@@ -1,12 +1,12 @@
 package hudson.plugins.cigame.rules.plugins.violation;
 
-import static hudson.plugins.cigame.util.Assert.*;
-
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
-
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.recipes.LocalData;
+
+import static hudson.plugins.cigame.util.Assert.assertPointsForBuildEquals;
+import static hudson.plugins.cigame.util.Assert.assertPointsForRuleSetEquals;
 
 public class DefaultViolationRuleIntegrationTest extends HudsonTestCase {
 

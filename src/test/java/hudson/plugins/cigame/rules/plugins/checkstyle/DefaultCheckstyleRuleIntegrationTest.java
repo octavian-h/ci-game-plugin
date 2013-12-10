@@ -1,12 +1,11 @@
 package hudson.plugins.cigame.rules.plugins.checkstyle;
 
-import static hudson.plugins.cigame.util.Assert.*;
-
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
-
 import org.jvnet.hudson.test.HudsonTestCase;
 import org.jvnet.hudson.test.recipes.LocalData;
+
+import static hudson.plugins.cigame.util.Assert.*;
 
 public class DefaultCheckstyleRuleIntegrationTest extends HudsonTestCase {
 

@@ -44,12 +44,12 @@ public class GamePublisher extends Notifier {
      * Calculates score from the build and rule book and adds a Game action to the build.
      * @param build build to calculate points for
      * @param ruleBook rules used in calculation
-     * @param usernameIsCasesensitive user names in Hudson are case insensitive.
+     * @param usernameIsCaseSensitive user names in Hudson are case insensitive.
      * @param listener the build listener
      * @return true, if any user scores were updated; false, otherwise
      * @throws IOException thrown if there was a problem setting a user property
      */
-    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive, BuildListener listener) throws IOException {
+    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCaseSensitive, BuildListener listener) throws IOException {
         ScoreCard sc = new ScoreCard();
         sc.record(build, ruleBook, listener);
 
@@ -66,7 +66,7 @@ public class GamePublisher extends Notifier {
         	previousBuild = previousBuild.getPreviousBuild();
         }
         
-        Set<User> players = new TreeSet<User>(usernameIsCasesensitive ? null : new CaseInsensitiveUserIdComparator());
+        Set<User> players = new TreeSet<User>(new UserIdComparator(usernameIsCaseSensitive));
         for (AbstractBuild<?, ?> b : accountableBuilds) {
         	ChangeLogSet<? extends Entry> changeSet = b.getChangeSet();
         	if (changeSet != null) {
@@ -82,7 +82,6 @@ public class GamePublisher extends Notifier {
     /**
      * Add the score to the users that have committed code in the change set
      * 
-     *
      * @param score the score that the build was worth
      * @param accountableBuilds the builds for which the {@code score} is awarded for.
      * @throws IOException thrown if the property could not be added to the user object.
@@ -105,12 +104,6 @@ public class GamePublisher extends Notifier {
         }
         return (!players.isEmpty());
     }
-
-//    public static class UsernameCaseinsensitiveComparator implements Comparator<User> {
-//        public int compare(User arg0, User arg1) {
-//            return arg0.getId().compareToIgnoreCase(arg1.getId());
-//        }
-//    }
 
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.BUILD;

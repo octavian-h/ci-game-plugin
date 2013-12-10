@@ -1,16 +1,14 @@
 package hudson.plugins.cigame;
 
-import static junit.framework.Assert.*;
-import static org.mockito.Mockito.*;
-
 import com.google.common.collect.Lists;
 import hudson.plugins.cigame.model.ScoreHistoryEntry;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
+
+import static junit.framework.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class UserScorePropertyTest {
 

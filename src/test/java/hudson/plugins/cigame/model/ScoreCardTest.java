@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class ScoreCardTest {
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void testIllegalStateThrownInGetScores() {
         ScoreCard sc = new ScoreCard();
         sc.getScores();
@@ -24,20 +24,20 @@ public class ScoreCardTest {
     @Test
     public void assertThatEmptyRuleResultIsNotUsed() {
         Rule rule = mock(Rule.class);
-        when(rule.evaluate(null, isA(AbstractBuild.class))).thenReturn(RuleResult.EMPTY_RESULT);
+        when(rule.evaluate(isA(AbstractBuild.class), isA(AbstractBuild.class))).thenReturn(RuleResult.EMPTY_RESULT);
         ScoreCard card = new ScoreCard();
         card.record(mock(AbstractBuild.class), new RuleSet("test", Arrays.asList(new Rule[]{rule})), null);
         assertThat(card.getScores().size(), is(0));
     }
-    
+
     @Test
-    public void assertRuleNull(){
-    	List<Rule> liste = new ArrayList<Rule>();
-    	liste.add(null);
-    	ScoreCard card = new ScoreCard();
-    	card.record(mock(AbstractBuild.class), new RuleSet("test", liste), null);
+    public void assertRuleNull() {
+        List<Rule> list = new ArrayList<Rule>();
+        list.add(null);
+        ScoreCard card = new ScoreCard();
+        card.record(mock(AbstractBuild.class), new RuleSet("test", list), null);
     }
-    
+
     @Test
     public void assertEmptyRuleBookDoesNotThrowIllegalException() {
         ScoreCard scoreCard = new ScoreCard();

@@ -46,7 +46,7 @@ public class ScoreHistoryEntryTest {
 
     private void fillEntry() throws IOException {
         this.entry.setAwardedScore(3.0);
-        this.entry.setAwardingRuns(ImmutableList.of((Run<?,?>)mockRun1, (Run<?,?>)mockRun2));
+        this.entry.setAwardingRuns(ImmutableList.of((Run<?, ?>) mockRun1, (Run<?, ?>) mockRun2));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class ScoreHistoryEntryTest {
         Set<TestRun> expected = ImmutableSet.of(mockRun2, mockRun1);
         Iterator<TestRun> expectedIter = expected.iterator();
         Iterator<Run<?, ?>> actualIter = entry.getAwardingRuns().iterator();
-        while(expectedIter.hasNext() && actualIter.hasNext()) {
+        while (expectedIter.hasNext() && actualIter.hasNext()) {
             assertEquals(expectedIter.next(), actualIter.next());
         }
         assertFalse(expectedIter.hasNext());
@@ -138,9 +138,9 @@ public class ScoreHistoryEntryTest {
         XStream xStream = new XStream(new DomDriver());
         xStream.setClassLoader(getClass().getClassLoader());
         ScoreHistoryEntry.ConverterImpl converter;
-        if(strategy != null){
+        if (strategy != null) {
             converter = new ScoreHistoryEntry.ConverterImpl(strategy);
-        } else{
+        } else {
             converter = new ScoreHistoryEntry.ConverterImpl();
         }
         xStream.registerConverter(converter);
@@ -150,17 +150,17 @@ public class ScoreHistoryEntryTest {
     private class TestRunCreationStrategy implements ScoreHistoryEntry.RunCreationStrategy {
 
         public Run<?, ?> createRunFromExternalId(String externalId) {
-            if(externalId.equals(mockRun1.getExternalizableId())) {
+            if (externalId.equals(mockRun1.getExternalizableId())) {
                 return mockRun1;
             }
-            if(externalId.equals(mockRun2.getExternalizableId())) {
+            if (externalId.equals(mockRun2.getExternalizableId())) {
                 return mockRun2;
             }
             throw new IllegalStateException("Unknown run resolution: " + externalId);
         }
     }
 
-    public static abstract class TestRun<JobT extends Job<JobT,RunT>,RunT extends Run<JobT,RunT>> extends Run<JobT,RunT> {
+    public static abstract class TestRun<JobT extends Job<JobT, RunT>, RunT extends Run<JobT, RunT>> extends Run<JobT, RunT> {
 
         protected TestRun(JobT job) throws IOException {
             super(job);

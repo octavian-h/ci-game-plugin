@@ -15,10 +15,10 @@ public class ScoreCardActionIntegrationTest extends HudsonTestCase {
         HtmlTable table = (HtmlTable) new WebClient().goTo("job/multiple-culprits/4/ci-game/").getHtmlElementById("game.culprits");
         assertThat(table.getRowCount(), is(2));
     }
-    
+
     @LocalData
     public void testThatUsernameWithDifferentCasingIsNotDisplayedAsOne() throws Exception {
         HtmlTable table = (HtmlTable) new WebClient().goTo("job/multiple-culprits/4/ci-game/").getHtmlElementById("game.culprits");
-        assertThat(table.getRowCount(), is(3));        
+        assertThat(table.getRowCount(), is(3));
     }
 }

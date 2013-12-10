@@ -1,11 +1,12 @@
 package hudson.plugins.cigame.util;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import hudson.model.AbstractBuild;
 import hudson.plugins.cigame.ScoreCardAction;
 import hudson.plugins.cigame.model.Score;
 import hudson.plugins.cigame.model.ScoreCard;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @SuppressWarnings("unchecked")
 public class Assert {

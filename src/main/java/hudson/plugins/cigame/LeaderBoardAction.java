@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Leader board for users participaing in the game.
+ * Leader board for users participating in the game.
  *
  * @author Erik Ramfelt
  */
@@ -47,17 +47,17 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
 
-    List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCasesensitive) {
-        ArrayList<UserScore> list = new ArrayList<UserScore>();
+    List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCaseSensitive) {
+        List<UserScore> list = new ArrayList<UserScore>();
 
         Collection<User> players;
-        if (usernameIsCasesensitive) {
+        if (usernameIsCaseSensitive) {
             players = users;
         } else {
             List<User> playerList = new ArrayList<User>();
-            CaseInsensitiveUserIdComparator caseInsensitiveUserIdComparator = new CaseInsensitiveUserIdComparator();
+            UserIdComparator userIdComparator = new UserIdComparator();
             for (User user : users) {
-                if (Collections.binarySearch(playerList, user, caseInsensitiveUserIdComparator) < 0) {
+                if (Collections.binarySearch(playerList, user, userIdComparator) < 0) {
                     playerList.add(user);
                 }
             }

@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * A {@link Rule} which is able to aggregate the scores for sub parts of a job.
- * This is e.g. used to calculate the scores for incremental maven multimodule builds.
+ * This is e.g. used to calculate the scores for incremental maven multi module builds.
  *
  * @author kutzi
  */
@@ -16,6 +16,4 @@ public interface AggregatableRule<T> extends Rule<T> {
      * builds (especially with the 'incremental build' option).
      */
     RuleResult<?> aggregate(Collection<RuleResult<T>> results);
-
-
 }

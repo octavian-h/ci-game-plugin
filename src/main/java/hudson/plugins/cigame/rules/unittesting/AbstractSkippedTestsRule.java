@@ -6,7 +6,7 @@ import hudson.tasks.test.AbstractTestResultAction;
 /**
  * Rule that gives points for increasing or decreasing the number of skipped
  * tests. This is done by comparing the current with the previous build.
- * 
+ *
  * @author <a href="www.digizol.com">Kamal Mettananda</a>
  * @since 1.20
  */

@@ -56,19 +56,19 @@ public class DefaultViolationRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
-    
+
     @Test
     public void assertNoPreviousBuildIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
         when(build.getResult()).thenReturn(Result.SUCCESS);
         when(build.getPreviousBuild()).thenReturn(null);
-        
+
         DefaultViolationRule rule = new DefaultViolationRule("pmd", "PMD Violations", 100, -100);
         RuleResult ruleResult = rule.evaluate(null, build);
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be zero", ruleResult.getPoints(), is((double) 0));
     }
-    
+
     @Test
     public void assertThatPointsAreAwardedCorrectly() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -91,7 +91,7 @@ public class DefaultViolationRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 5000", ruleResult.getPoints(), is(5000d));
     }
-    
+
     @Test
     public void assertIfPreviousBuildFailedResultIsWorthZeroPoints() {
         AbstractBuild build = mock(AbstractBuild.class);
@@ -110,7 +110,7 @@ public class DefaultViolationRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
-    
+
     @Bug(3726)
     @Test
     public void assertThatNonExistingPreviousReportsAreIgnored() {
@@ -134,7 +134,7 @@ public class DefaultViolationRuleTest {
         assertNotNull("Rule result must not be null", ruleResult);
         assertThat("Points should be 0", ruleResult.getPoints(), is(0d));
     }
-    
+
     @Bug(3726)
     @Test
     public void assertThatPreviousReportsWithErrorIsIgnored() {
@@ -162,19 +162,20 @@ public class DefaultViolationRuleTest {
 
     /**
      * Creates a violation report stub with one TypeReport containing the method params
-     * @param type type in the report
-     * @param number the number of violations
+     *
+     * @param type     type in the report
+     * @param number   the number of violations
      * @param previous if there is a previous report to be returned by report.getPrevious();
      * @return mocked ViolationsReport
      */
     private ViolationsReport createViolationsReportStub(final String type, int number, final ViolationsReport previous) {
         ViolationsReport report = mock(ViolationsReport.class);
         TypeSummary typeSummary = new TypeSummary();
-        
+
         TypeReport typeReport = report.new TypeReport(type, null, number);
         Map<String, TypeReport> typeReports = new HashMap<String, TypeReport>();
         typeReports.put(type, typeReport);
-        
+
         when(report.getTypeSummary(type)).thenReturn(typeSummary);
         when(report.getTypeReports()).thenReturn(typeReports);
         when(report.typeCount(type)).thenReturn(number);

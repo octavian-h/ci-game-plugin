@@ -1,39 +1,39 @@
 package hudson.plugins.cigame.util;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import hudson.model.AbstractBuild;
+import hudson.model.Action;
+import hudson.model.Build;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import hudson.model.AbstractBuild;
-import hudson.model.Action;
-import hudson.model.Build;
-
-import org.junit.Test;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings("unchecked")
 public class ActionSequenceRetrieverTest {
 
-    @Test 
+    @Test
     public void assertNullIsReturnedWithBuildWithoutRequestedAction() {
-        Build<?,?> build = mock(Build.class);
+        Build<?, ?> build = mock(Build.class);
         when(build.getActions(Action.class)).thenReturn(null);
         assertThat(new ActionSequenceRetriever(Action.class, 1).getSequence(build), is(nullValue()));
     }
-    
-    @Test 
+
+    @Test
     public void assertNullIsReturnedWithSingleBuildWhenLongerSequenceIsRequested() {
         AbstractBuild build = mock(Build.class);
         Action action = mock(Action.class);
         when(build.getActions(Action.class)).thenReturn(Arrays.asList(action));
         assertThat(new ActionSequenceRetriever(Action.class, 2).getSequence(build), is(nullValue()));
     }
-    
-    @Test 
+
+    @Test
     public void assertNullIsReturnedWithLastBuildWithoutRequestedAction() {
         AbstractBuild build = mock(Build.class);
         AbstractBuild previousBuild = mock(Build.class);
@@ -43,8 +43,8 @@ public class ActionSequenceRetrieverTest {
         when(previousBuild.getActions(Action.class)).thenReturn(null);
         assertThat(new ActionSequenceRetriever(Action.class, 2).getSequence(build), is(nullValue()));
     }
-    
-    @Test 
+
+    @Test
     public void assertListIsReturnedForCompleteSequence() {
         AbstractBuild build = mock(Build.class);
         AbstractBuild previousBuild = mock(Build.class);
