@@ -11,25 +11,70 @@
         <l:main-panel>
             <h1>${%Leaderboard.title}</h1>
             <div>
-                <table class="pane sortable bigtable" style="width:50%">
-                    <tr>
-                        <td class="pane-header" align="left"/>
-                        <td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
-                        <td class="pane-header" align="left,center">${%Leaderboard.Description}</td>
-                        <td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>
-                    </tr>
-                    <j:forEach var="userscore" items="${it.getUserScores()}">
+                <!--<table class="pane sortable bigtable" style="width:50%">-->
+                    <!--<tr>-->
+                        <!--<td class="pane-header" align="left"/>-->
+                        <!--<td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>-->
+                        <!--<td class="pane-header" align="left,center">${%Leaderboard.Description}</td>-->
+                        <!--<td class="pane-header" initialSortDir="up" align="left" width="10%">${%Leaderboard.Score}</td>-->
+                    <!--</tr>-->
+                    <!--<j:forEach var="userscore" items="${it.getUserScores()}">-->
+
+                        <!--<tr>-->
+                            <!--<td>-->
+                                <!--<img src="${h.getAvatar(userscore.user,iconSize)}" alt="${userscore.user} icon"/>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                                <!--<a href="${rootURL}/${userscore.user.url}">${userscore.user}</a>-->
+                            <!--</td>-->
+                            <!--<td>${userscore.description}</td>-->
+                            <!--<td>${userscore.score}</td>-->
+                        <!--</tr>-->
+                    <!--</j:forEach>-->
+                <!--</table>-->
+
+                <table class="pane">
+                    <tbody>
                         <tr>
-                            <td>
-                                <img src="${h.getAvatar(userscore.user,iconSize)}" alt="${userscore.user} icon"/>
-                            </td>
-                            <td>
-                                <a href="${rootURL}/${userscore.user.url}">${userscore.user}</a>
-                            </td>
-                            <td>${userscore.description}</td>
-                            <td>${userscore.score}</td>
+                            <j:forEach var="userGroup" items="${it.getUserGroups().keySet()}">
+                                <td class="pane-header" align="left">
+                                    <img src="${rootURL}/${userGroup.imageUrl}"
+                                         alt="${userGroup.name} icon"
+                                         style="margin: 2px; vertical-align: middle;"/>
+                                    <b style="font-size: 20px;">${userGroup.name}</b>
+                                </td>
+                            </j:forEach>
                         </tr>
-                    </j:forEach>
+                        <tr>
+                            <j:forEach var="userScores" items="${it.getUserGroups().values()}">
+                                <td>
+                                    <table class="pane sortable bigtable">
+                                        <tr>
+                                            <td class="pane-header" align="left"/>
+                                            <td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
+                                            <td class="pane-header" initialSortDir="up" align="left" width="10%">
+                                                ${%Leaderboard.Score}
+                                            </td>
+                                        </tr>
+                                        <j:forEach var="userScore" items="${userScores}">
+                                            <tr>
+                                                <td>
+                                                    <img src="${h.getAvatar(userScore.user,iconSize)}"
+                                                         alt="${userScore.user} icon"/>
+                                                </td>
+                                                <td>
+                                                    <a href="${rootURL}/${userScore.user.url}">${userScore.user}</a>
+                                                </td>
+                                                <td>
+                                                    ${userScore.score}
+                                                </td>
+                                            </tr>
+                                        </j:forEach>
+                                    </table>
+                                </td>
+                            </j:forEach>
+                        </tr>
+                    </tbody>
                 </table>
                 <t:iconSize/>
             </div>

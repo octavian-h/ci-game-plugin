@@ -4,7 +4,7 @@ import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
 import hudson.model.User;
-import hudson.plugins.cigame.model.Character;
+import hudson.plugins.cigame.model.ScoreLevel;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
@@ -114,19 +114,38 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     @Exported
-    public List<hudson.plugins.cigame.model.Character> getCharacters() {
-        Character colonel = new Character("Colonel", "/plugin/ci-game/images/colonel.png");
-        Character general = new Character("Genral", "/plugin/ci-game/images/general.png");
-        List<Character> images = new ArrayList<Character>();
-        images.add(colonel);
-        images.add(general);
-        return images;
+    public Map<ScoreLevel, List<UserScore>> getUserGroups() {
+        Map<ScoreLevel, List<UserScore>> result = new TreeMap<ScoreLevel, List<UserScore>>(new Comparator<ScoreLevel>() {
+            public int compare(ScoreLevel o1, ScoreLevel o2) {
+                return o2.getLevel() - o1.getLevel(); //descending
+            }
+        });
+
+        GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);
+        List<UserScore> userScores = getUserScores(User.getAll(), gameDescriptor.getNamesAreCaseSensitive());
+        Map<Integer, ScoreLevel> levels = gameDescriptor.getScoreLevels();
+        for (UserScore userScore : userScores) {
+            if (userScore.getScore() < 10) {
+                addUserScoreToLevel(userScore, levels.get(1), result);
+            } else if (userScore.getScore() < 20) {
+                addUserScoreToLevel(userScore, levels.get(2), result);
+            } else if (userScore.getScore() < 30) {
+                addUserScoreToLevel(userScore, levels.get(3), result);
+            } else {
+                addUserScoreToLevel(userScore, levels.get(4), result);
+            }
+        }
+
+        return result;
     }
 
-    @Exported
-    public List<UserScore> getUserScoresByCharacter(Character rank) {
-        return null;
-        //getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
+    private void addUserScoreToLevel(UserScore userScore, ScoreLevel level, Map<ScoreLevel, List<UserScore>> userScores) {
+        List<UserScore> scores = userScores.get(level);
+        if (scores == null) {
+            scores = new ArrayList<UserScore>();
+            userScores.put(level, scores);
+        }
+        scores.add(userScore);
     }
 
     @ExportedBean(defaultVisibility = 999)
