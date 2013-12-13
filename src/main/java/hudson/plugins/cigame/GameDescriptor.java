@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import hudson.Extension;
 import hudson.model.AbstractProject;
+import hudson.model.Hudson;
 import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
@@ -19,11 +20,15 @@ import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
+import org.apache.commons.io.IOUtils;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 // Config page for the application (descriptor of the game plugin)
 @Extension
@@ -32,7 +37,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
     public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
     public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
     private transient RuleBook rulebook;
-    private transient Map<Integer, ScoreLevel> scoreLevels;
+    private transient List<ScoreLevel> scoreLevels;
     private boolean namesAreCaseSensitive = true;
     private int passedTestIncreasingPoints = 1;
     private int passedTestDecreasingPoints = 0;
@@ -73,16 +78,33 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
         }
     }
 
-    public Map<Integer, ScoreLevel> getScoreLevels(){
-        if (scoreLevels == null){
-            scoreLevels = new HashMap<Integer, ScoreLevel>();
-            scoreLevels.put(1, new ScoreLevel("Major", "", "plugin/ci-game/images/major.png", 1));
-            scoreLevels.put(2, new ScoreLevel("Colonel", "", "plugin/ci-game/images/colonel.png", 2));
-            scoreLevels.put(3, new ScoreLevel("General", "", "plugin/ci-game/images/general.png", 3));
-            scoreLevels.put(4, new ScoreLevel("Marshal", "", "plugin/ci-game/images/marshal.png", 4));
+    public List<ScoreLevel> getScoreLevels() {
+        if (scoreLevels == null) {
+            String jsonScoreLevels = "[]";
+            try {
+                InputStream inputStream = this.getClass().getResourceAsStream("/score-levels.json");
+                StringWriter writer = new StringWriter();
+                IOUtils.copy(inputStream, writer, "UTF-8");
+                jsonScoreLevels = writer.toString();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<ScoreLevel>>() {
+            }.getType();
+            scoreLevels = gson.fromJson(jsonScoreLevels, listType);
+            String rootUrl = Hudson.getInstance().getRootUrl();
+            for (ScoreLevel scoreLevel : scoreLevels) {
+                String imageUrl = scoreLevel.getImageUrl();
+                if (imageUrl.startsWith("/")) {
+                    scoreLevel.setImageUrl(rootUrl + imageUrl);
+                }
+            }
         }
         return scoreLevels;
     }
+
     // config page heading
     @Override
     public String getDisplayName() {
@@ -182,7 +204,7 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
         for (LeaderBoardAction.UserScore userScore : list) {
             UserScoreProperty property = new UserScoreProperty(userScore.getScore(), true, null);
             for (User user : users) {
-                if (user.getId().equals(property.getUser().getId())){
+                if (user.getId().equals(property.getUser().getId())) {
                     try {
                         user.addProperty(property);
                     } catch (IOException e) {
