@@ -23,6 +23,7 @@ public class UserScoreProperty extends UserProperty {
     @VisibleForTesting
     protected static final int MAX_HISTORY_LENGTH = 10;
     private double score;
+    private String userId;
     /**
      * Inversed name as default value is false when serializing from data that
      * has doesnt have the value.
@@ -56,9 +57,25 @@ public class UserScoreProperty extends UserProperty {
         this.score = score;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Exported
     public boolean isParticipatingInGame() {
         return !isNotParticipatingInGame;
+    }
+
+    public void setNotParticipatingInGame(boolean notParticipatingInGame) {
+        isNotParticipatingInGame = notParticipatingInGame;
+    }
+
+    public void setScoreHistoryEntries(List<ScoreHistoryEntry> scoreHistoryEntries) {
+        this.scoreHistoryEntries = scoreHistoryEntries;
     }
 
     public void rememberAccountableBuilds(List<AbstractBuild<?, ?>> accountableBuilds, double score) {

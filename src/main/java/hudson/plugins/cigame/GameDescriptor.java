@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Hudson;
-import hudson.model.User;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.model.ScoreLevel;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.List;
 
 // Config page for the application (descriptor of the game plugin)
@@ -186,33 +184,4 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
     public void setSkippedTestDecreasingPoints(int skippedTestDecreasingPoints) {
         this.skippedTestDecreasingPoints = skippedTestDecreasingPoints;
     }
-
-    public String exportScores() {
-        LeaderBoardAction page = new LeaderBoardAction();
-        Gson gson = new Gson();
-        return gson.toJson(page.getUserScores());
-    }
-
-    public void importScores(String json) {
-        LeaderBoardAction page = new LeaderBoardAction();
-        Gson gson = new Gson();
-        Type collectionType = new TypeToken<List<LeaderBoardAction.UserScore>>() {
-        }.getType();
-        Collection<User> users = User.getAll();
-
-        List<LeaderBoardAction.UserScore> list = gson.fromJson("", collectionType);
-        for (LeaderBoardAction.UserScore userScore : list) {
-            UserScoreProperty property = new UserScoreProperty(userScore.getScore(), true, null);
-            for (User user : users) {
-                if (user.getId().equals(property.getUser().getId())) {
-                    try {
-                        user.addProperty(property);
-                    } catch (IOException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
-                }
-            }
-        }
-    }
-
 }

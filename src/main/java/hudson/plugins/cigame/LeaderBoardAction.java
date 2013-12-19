@@ -1,5 +1,7 @@
 package hudson.plugins.cigame;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import hudson.Extension;
 import hudson.model.Hudson;
 import hudson.model.RootAction;
@@ -8,12 +10,20 @@ import hudson.plugins.cigame.model.ScoreLevel;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
+import net.sf.json.JSONObject;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.StaplerResponse;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
+import javax.servlet.ServletException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -47,7 +57,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
         return getUserScores(User.getAll(), Hudson.getInstance().getDescriptorByType(GameDescriptor.class).getNamesAreCaseSensitive());
     }
 
-    List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCaseSensitive) {
+    public List<UserScore> getUserScores(Collection<User> users, boolean usernameIsCaseSensitive) {
         List<UserScore> list = new ArrayList<UserScore>();
 
         Collection<User> players;
@@ -85,18 +95,80 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     public void doResetScores(StaplerRequest req, StaplerResponse rsp) throws IOException {
-        if (Hudson.getInstance().getACL().hasPermission(Hudson.ADMINISTER)) {
-            doResetScores(User.getAll());
+        User current = User.current();
+        if (current != null && current.hasPermission(Hudson.ADMINISTER)) {
+            resetScores(User.getAll());
         }
         rsp.sendRedirect2(req.getContextPath());
     }
 
-    void doResetScores(Collection<User> users) throws IOException {
+    public void resetScores(Collection<User> users) throws IOException {
         for (User user : users) {
             UserScoreProperty property = user.getProperty(UserScoreProperty.class);
             if (property != null) {
                 property.setScore(0);
                 user.save();
+            }
+        }
+    }
+
+    public void doExportScores(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
+        rsp.setContentType("application/json");
+        rsp.setHeader("Content-Disposition", "inline; filename=scores.json");
+
+        String jsonString = exportScores();
+        InputStream in = new ByteArrayInputStream(jsonString.getBytes());
+        rsp.serveFile(req, in, 0, -1, jsonString.length(), "scores.json");
+    }
+
+    public String exportScores() {
+        Gson gson = new Gson();
+        Collection<User> users = User.getAll();
+        List<UserScoreProperty> scores = new ArrayList<UserScoreProperty>();
+        for (User user : users) {
+            UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+            if ((property != null) && property.isParticipatingInGame()) {
+                property.setUserId(user.getId());
+                scores.add(property);
+            }
+        }
+        return gson.toJson(scores);
+    }
+
+    public void doImportScores(StaplerRequest req, StaplerResponse rsp) throws IOException, ServletException {
+        User current = User.current();
+        if (current != null && current.hasPermission(Hudson.ADMINISTER)) {
+            JSONObject form = req.getSubmittedForm();
+            FileItem fileItem = req.getFileItem(form.getString("jsonData"));
+            InputStream inputStream = fileItem.getInputStream();
+            StringWriter writer = new StringWriter();
+            IOUtils.copy(inputStream, writer, "UTF-8");
+            importScores(writer.toString());
+        }
+        rsp.sendRedirect2(req.getContextPath());
+    }
+
+    public void importScores(String json) throws IOException {
+        Gson gson = new Gson();
+        Type collectionType = new TypeToken<List<UserScoreProperty>>() {
+        }.getType();
+        List<UserScoreProperty> list = gson.fromJson(json, collectionType);
+
+        Collection<User> users = User.getAll();
+
+        for (UserScoreProperty scoreProperty : list) {
+            for (User user : users) {
+                if (user.getId().equals(scoreProperty.getUserId())) {
+                    UserScoreProperty property = user.getProperty(UserScoreProperty.class);
+                    if (property == null) {
+                        user.addProperty(scoreProperty);
+                    } else {
+                        property.setScore(scoreProperty.getScore());
+                        property.setNotParticipatingInGame(!scoreProperty.isParticipatingInGame());
+                        property.setScoreHistoryEntries(scoreProperty.getMostRecentScores());
+                    }
+                    user.save();
+                }
             }
         }
     }

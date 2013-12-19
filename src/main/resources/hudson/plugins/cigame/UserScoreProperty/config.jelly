@@ -1,9 +1,10 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-	<f:entry title="${%User.IsParticipating}">
-		<f:checkbox name="game.participatingInGame" checked="${h.defaultToTrue(instance.participatingInGame)}" />
-	</f:entry>
-	<f:entry title="${%User.CurrentScore}">
-		<f:textbox name="game.score" value="${instance.score}"  disabled="disabled" readonly="readonly"/>
-	</f:entry>
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+    <f:entry title="${%User.IsParticipating}">
+        <f:checkbox name="game.participatingInGame" checked="${h.defaultToTrue(instance.participatingInGame)}"/>
+    </f:entry>
+    <f:entry title="${%User.CurrentScore}">
+        <f:readOnlyTextbox name="game.score" value="${instance.score}"/>
+    </f:entry>
 </j:jelly>

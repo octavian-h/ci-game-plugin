@@ -34,7 +34,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testNoTests() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(10);
+        //gameDescriptor.setPassedTestIncreasingPoints(10);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         RuleResult result = rule.evaluate((0 - 0 - 0) - (0 - 0 - 0));
@@ -43,7 +43,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testMorePassingTests() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(10);
+        //gameDescriptor.setPassedTestIncreasingPoints(10);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         RuleResult result = rule.evaluate((2 - 0 - 0) - (0 - 0 - 0));
@@ -52,7 +52,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testLessPassingTests() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(10);
+        //gameDescriptor.setPassedTestIncreasingPoints(10);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         RuleResult result = rule.evaluate((2 - 0 - 0) - (4 - 0 - 0));
@@ -61,7 +61,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testNoMorePointsThanPassingTests() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(1);
+        //gameDescriptor.setPassedTestIncreasingPoints(1);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
 
@@ -87,7 +87,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testPreviousBuildFailed() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(10);
+        //gameDescriptor.setPassedTestIncreasingPoints(10);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         AbstractBuild<?, ?> previousBuild =
@@ -103,7 +103,7 @@ public class IncreasingPassedTestsRuleTest {
 
     @Test
     public void testCurrentBuildFailed() throws Exception {
-        gameDescriptor.setPassedTestIncreasingPoints(10);
+        //gameDescriptor.setPassedTestIncreasingPoints(10);
 
         IncreasingPassedTestsRule rule = new IncreasingPassedTestsRule();
         AbstractBuild<?, ?> previousBuild =
@@ -131,7 +131,7 @@ public class IncreasingPassedTestsRuleTest {
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
 
-        gameDescriptor.setPassedTestIncreasingPoints(-100);
+        //gameDescriptor.setPassedTestIncreasingPoints(-100);
 
         RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertNull("Rule result must be null", ruleResult);
@@ -152,7 +152,7 @@ public class IncreasingPassedTestsRuleTest {
         when(action.getTotalCount()).thenReturn(10);
         when(previousAction.getTotalCount()).thenReturn(5);
 
-        gameDescriptor.setPassedTestIncreasingPoints(100);
+        //gameDescriptor.setPassedTestIncreasingPoints(100);
 
         RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertThat(ruleResult, notNullValue());
@@ -177,7 +177,7 @@ public class IncreasingPassedTestsRuleTest {
         when(previousAction.getTotalCount()).thenReturn(5);
         when(previousAction.getSkipCount()).thenReturn(1);
 
-        gameDescriptor.setPassedTestIncreasingPoints(100);
+        //gameDescriptor.setPassedTestIncreasingPoints(100);
 
         RuleResult ruleResult = new IncreasingPassedTestsRule().evaluate(previousBuild, build);
         assertThat(ruleResult, notNullValue());

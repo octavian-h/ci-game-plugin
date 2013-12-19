@@ -171,7 +171,7 @@ public class MavenMultiModuleUnitTestsTest {
     }
 
     private IncreasingPassedTestsRule getIncreasingPassedTestsRule() {
-        gameDescriptor.setPassedTestIncreasingPoints(1);
+        //gameDescriptor.setPassedTestIncreasingPoints(1);
         return new IncreasingPassedTestsRule();
     }
 
