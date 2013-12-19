@@ -165,7 +165,6 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
                     } else {
                         property.setScore(scoreProperty.getScore());
                         property.setNotParticipatingInGame(!scoreProperty.isParticipatingInGame());
-                        property.setScoreHistoryEntries(scoreProperty.getMostRecentScores());
                     }
                     user.save();
                 }
