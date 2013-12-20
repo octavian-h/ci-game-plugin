@@ -5,8 +5,8 @@
         <st:include page="sidepanel.jelly"/>
         <l:main-panel>
             <form method="get" action="resetScores">
-                ${%Leaderboard.ResetScoresQuestion}
-                <f:submit value="${%Yes}"/>
+                ${%cigame.Leaderboard.resetScoresQuestion}
+                <f:submit value="${%cigame.Yes}"/>
             </form>
         </l:main-panel>
     </l:layout>

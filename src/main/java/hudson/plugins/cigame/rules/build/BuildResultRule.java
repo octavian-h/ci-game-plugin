@@ -2,19 +2,29 @@ package hudson.plugins.cigame.rules.build;
 
 import hudson.model.AbstractBuild;
 import hudson.model.Result;
+import hudson.plugins.cigame.GameDescriptor;
 import hudson.plugins.cigame.model.Rule;
 import hudson.plugins.cigame.model.RuleResult;
+import jenkins.model.Jenkins;
 
 /**
  * Rule that gives points on the result of the build.
  */
 public class BuildResultRule implements Rule<Void> {
-
+    public static final int DEFAULT_SUCCESS_POINTS = 1;
+    public static final int DEFAULT_FAILURE_POINTS = -10;
     private int failurePoints;
     private int successPoints;
 
     public BuildResultRule() {
-        this(1, -10);
+        GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
+        if (gameDescriptor != null) {
+            this.successPoints = DEFAULT_SUCCESS_POINTS;
+            this.failurePoints = DEFAULT_FAILURE_POINTS;
+        } else {
+            this.successPoints = gameDescriptor.getBuildSuccessPoints();
+            this.failurePoints = gameDescriptor.getBuildFailurePoints();
+        }
     }
 
     public BuildResultRule(int successPoints, int failurePoints) {

@@ -6,11 +6,11 @@
         <l:main-panel>
             <form method="post" action="importScores">
                 <div>
-                    <label for="jsonData">Score file</label>
+                    <label for="jsonData">${%cigame.Leaderboard.scoreFile}</label>
                     <input type="file" name="jsonData" jsonAware="yes"/>
                 </div>
                 <div>
-                    <f:submit value="Import scores"/>
+                    <f:submit value="${%cigame.Leaderboard.importScores"/>
                 </div>
             </form>
         </l:main-panel>

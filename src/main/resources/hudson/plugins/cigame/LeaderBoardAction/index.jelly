@@ -1,7 +1,7 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson">
-    <l:layout title="${%Leaderboard.title}">
+    <l:layout title="${%cigame.Leaderboard.title}">
         <!--<l:header>-->
             <!--<link rel="stylesheet" href="${rootURL}/plugin/ci-game/game.css" type="text/css" media="screen"/>-->
         <!--</l:header>-->
@@ -9,7 +9,7 @@
         <st:include page="sidepanel.jelly"/>
         <t:setIconSize/>
         <l:main-panel>
-            <h1>${%Leaderboard.title}</h1>
+            <h1>${%cigame.Leaderboard.title}</h1>
             <div>
                 <table class="pane">
                     <tbody>
@@ -19,7 +19,7 @@
                                     <div style="display: table;">
                                         <img src="${userGroup.imageUrl}"
                                              alt="${userGroup.name} icon"/>
-                                        <div style="display: table-cell; vertical-align: middle;padding: 5px;">
+                                        <div style="display: table-cell; vertical-align: middle; padding: 5px;">
                                             <b style="font-size: 20px;">${userGroup.name}</b>
                                             <p>${userGroup.description}</p>
                                         </div>
@@ -33,9 +33,9 @@
                                     <table class="pane sortable bigtable">
                                         <tr>
                                             <td class="pane-header" align="left"/>
-                                            <td class="pane-header" align="left,center">${%Leaderboard.Participant}</td>
+                                            <td class="pane-header" align="left,center">${%cigame.Leaderboard.Participant}</td>
                                             <td class="pane-header" initialSortDir="up" align="left" width="10%">
-                                                ${%Leaderboard.Score}
+                                                ${%cigame.Leaderboard.Score}
                                             </td>
                                         </tr>
                                         <j:forEach var="userScore" items="${userScores}">

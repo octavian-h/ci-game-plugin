@@ -8,6 +8,7 @@ import hudson.model.Hudson;
 import hudson.plugins.cigame.model.RuleBook;
 import hudson.plugins.cigame.model.RuleSet;
 import hudson.plugins.cigame.model.ScoreLevel;
+import hudson.plugins.cigame.rules.build.BuildResultRule;
 import hudson.plugins.cigame.rules.build.BuildRuleSet;
 import hudson.plugins.cigame.rules.plugins.checkstyle.CheckstyleRuleSet;
 import hudson.plugins.cigame.rules.plugins.findbugs.FindBugsRuleSet;
@@ -15,7 +16,7 @@ import hudson.plugins.cigame.rules.plugins.opentasks.OpenTasksRuleSet;
 import hudson.plugins.cigame.rules.plugins.pmd.PmdRuleSet;
 import hudson.plugins.cigame.rules.plugins.violation.ViolationsRuleSet;
 import hudson.plugins.cigame.rules.plugins.warnings.WarningsRuleSet;
-import hudson.plugins.cigame.rules.unittesting.UnitTestingRuleSet;
+import hudson.plugins.cigame.rules.unittesting.*;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import net.sf.json.JSONObject;
@@ -33,16 +34,17 @@ import java.util.List;
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     public static final String ACTION_LOGO_SMALL = "/plugin/ci-game/icons/24x24/game.png"; //$NON-NLS-1$
-
     private transient RuleBook rulebook;
     private transient List<ScoreLevel> scoreLevels;
     private boolean namesAreCaseSensitive = true;
-    private int passedTestIncreasingPoints = 1;
-    private int passedTestDecreasingPoints = 0;
-    private int failedTestIncreasingPoints = -1;
-    private int failedTestDecreasingPoints = 0;
-    private int skippedTestIncreasingPoints = 0;
-    private int skippedTestDecreasingPoints = 0;
+    private int passedTestIncreasingPoints = IncreasingPassedTestsRule.DEFAULT_POINTS;
+    private int passedTestDecreasingPoints = DecreasingPassedTestsRule.DEFAULT_POINTS;
+    private int failedTestIncreasingPoints = IncreasingFailedTestsRule.DEFAULT_POINTS;
+    private int failedTestDecreasingPoints = DecreasingFailedTestsRule.DEFAULT_POINTS;
+    private int skippedTestIncreasingPoints = IncreasingSkippedTestsRule.DEFAULT_POINTS;
+    private int skippedTestDecreasingPoints = DecreasingSkippedTestsRule.DEFAULT_POINTS;
+    private int buildSuccessPoints = BuildResultRule.DEFAULT_SUCCESS_POINTS;
+    private int buildFailurePoints = BuildResultRule.DEFAULT_FAILURE_POINTS;
 
     public GameDescriptor() {
         super(GamePublisher.class);
@@ -183,5 +185,21 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
     public void setSkippedTestDecreasingPoints(int skippedTestDecreasingPoints) {
         this.skippedTestDecreasingPoints = skippedTestDecreasingPoints;
+    }
+
+    public int getBuildSuccessPoints() {
+        return buildSuccessPoints;
+    }
+
+    public void setBuildSuccessPoints(int buildSuccessPoints) {
+        this.buildSuccessPoints = buildSuccessPoints;
+    }
+
+    public int getBuildFailurePoints() {
+        return buildFailurePoints;
+    }
+
+    public void setBuildFailurePoints(int buildFailurePoints) {
+        this.buildFailurePoints = buildFailurePoints;
     }
 }

@@ -12,7 +12,7 @@ import jenkins.model.Jenkins;
  */
 public class DecreasingPassedTestsRule extends AbstractPassedTestsRule {
 
-    private static final int DEFAULT_POINTS = 1;
+    public static final int DEFAULT_POINTS = 0;
 
     private int getPoints() {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);

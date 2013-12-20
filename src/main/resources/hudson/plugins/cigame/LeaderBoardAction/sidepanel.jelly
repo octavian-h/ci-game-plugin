@@ -3,16 +3,16 @@
     <l:header/>
     <l:side-panel>
         <l:tasks>
-            <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%Back.To.Dashboard}"/>
+            <l:task icon="images/24x24/up.gif" href="${rootURL}/" title="${%cigame.Leaderboard.backToDashboard}"/>
             <l:task icon="plugin/ci-game/icons/24x24/game.png" href="${rootURL}/ci-game/"
-                    title="${%Leaderboard.title}"/>
+                    title="${%cigame.Leaderboard.title}"/>
             <l:task icon="plugin/ci-game/icons/24x24/export.png" href="exportScores"
-                    title="Export scores"/>
+                    title="${%cigame.Leaderboard.exportScores}"/>
             <l:hasPermission permission="${app.ADMINISTER}">
                 <l:task icon="plugin/ci-game/icons/24x24/import.png" href="confirmImportScores"
-                        title="Import scores"/>
+                        title="${%cigame.Leaderboard.importScores}"/>
                 <l:task icon="plugin/ci-game/icons/24x24/delete.png" href="confirmResetScores"
-                        title="${%Leaderboard.ResetScoresAction}"/>
+                        title="${%cigame.Leaderboard.resetScores}"/>
             </l:hasPermission>
         </l:tasks>
     </l:side-panel>

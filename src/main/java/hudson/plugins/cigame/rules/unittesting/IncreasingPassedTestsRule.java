@@ -13,7 +13,7 @@ import hudson.plugins.cigame.model.RuleResult;
  */
 public class IncreasingPassedTestsRule extends AbstractPassedTestsRule {
 
-    private static final int DEFAULT_POINTS = 1;
+    public static final int DEFAULT_POINTS = 1;
 
     private int getPoints() {
         GameDescriptor gameDescriptor = Hudson.getInstance().getDescriptorByType(GameDescriptor.class);

@@ -12,7 +12,7 @@ import jenkins.model.Jenkins;
  */
 public class DecreasingSkippedTestsRule extends AbstractSkippedTestsRule {
 
-    private static final int DEFAULT_POINTS = 0;
+    public static final int DEFAULT_POINTS = 0;
 
     private int getPoints() {
         GameDescriptor gameDescriptor = Jenkins.getInstance().getDescriptorByType(GameDescriptor.class);
