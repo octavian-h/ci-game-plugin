@@ -5,9 +5,6 @@
         <f:entry title="${%cigame.namesarecasesensitive}" help="/plugin/ci-game/namesarecasesensitive.html">
             <f:checkbox field="namesAreCaseSensitive"/>
         </f:entry>
-        <f:entry title="uploadNewFile" description="description.uploadNewFile">
-            <input type="file" name="configFile" jsonAware="yes"/>
-        </f:entry>
         <f:advanced title="${%cigame.unittests.subtitle}">
             <f:entry title="${%cigame.unittests.subtitle}">
                 <table width="100%" style="border: 1px solid #aaa">
