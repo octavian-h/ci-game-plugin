@@ -40,7 +40,7 @@ public class LeaderBoardAction implements RootAction, AccessControlled {
     }
 
     public String getIconFileName() {
-        return GameDescriptor.ACTION_LOGO_MEDIUM;
+        return GameDescriptor.ACTION_LOGO_SMALL;
     }
 
     public String getUrlName() {

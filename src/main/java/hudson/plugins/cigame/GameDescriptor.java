@@ -32,8 +32,8 @@ import java.util.List;
 @Extension
 public class GameDescriptor extends BuildStepDescriptor<Publisher> {
 
-    public static final String ACTION_LOGO_LARGE = "/plugin/ci-game/icons/game-32x32.png"; //$NON-NLS-1$
-    public static final String ACTION_LOGO_MEDIUM = "/plugin/ci-game/icons/game-22x22.png"; //$NON-NLS-1$
+    public static final String ACTION_LOGO_SMALL = "/plugin/ci-game/icons/24x24/game.png"; //$NON-NLS-1$
+
     private transient RuleBook rulebook;
     private transient List<ScoreLevel> scoreLevels;
     private boolean namesAreCaseSensitive = true;

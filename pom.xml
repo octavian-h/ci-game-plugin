@@ -64,19 +64,16 @@
                         <source>1.7</source>
                         <target>1.7</target>
                     </configuration>
-                    <!-- 2.3.2 -->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>2.7</version>
-                    <!-- 2.5 -->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
                     <version>2.4</version>
-                    <!-- 2.3.1 -->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -177,7 +174,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>1.7.1</version>
+            <version>2.2.4</version>
         </dependency>
     </dependencies>
 
